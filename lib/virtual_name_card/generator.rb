@@ -13,21 +13,31 @@ module VirtualNameCard
             File.expand_path("../../base_images/without_twitter.jpg", __dir__)
           end
 
-        @image = MiniMagick::Image.open(base_image_path)
+        image = MiniMagick::Image.open(base_image_path)
 
-        name_kanji_combine(name_kanji)
-        name_romaji_combine(name_romaji)
-        role_combine(role)
+        name_kanji_combine(image: image, text: name_kanji)
+        name_romaji_combine(image: image, text: name_romaji)
+        role_combine(image: image, text: role)
 
         if twitter_account
-          twitter_account_combine(twitter_account)
+          twitter_account_combine(image: image, text: twitter_account)
         end
 
-        @image.write GENERATED_FILE_PATH
+        image
       end
 
-      private def name_kanji_combine(text)
-        @image.combine_options do |config|
+      def write(name_kanji:, name_romaji:, role:, twitter_account: nil)
+        image = generate(
+          name_kanji: name_kanji,
+          name_romaji: name_romaji,
+          role: role,
+          twitter_account: twitter_account,
+        )
+        image.write GENERATED_FILE_PATH
+      end
+
+      private def name_kanji_combine(image:, text:)
+        image.combine_options do |config|
           config.font File.expand_path("../../fonts/Noto_Sans_JP/NotoSansJP-Medium.otf", __dir__)
           config.gravity "west"
           config.pointsize 100
@@ -36,8 +46,8 @@ module VirtualNameCard
         end
       end
 
-      private def name_romaji_combine(text)
-        @image.combine_options do |config|
+      private def name_romaji_combine(image:, text:)
+        image.combine_options do |config|
           config.font File.expand_path("../../fonts/Noto_Sans_JP/NotoSansJP-Regular.otf", __dir__)
           config.gravity "west"
           config.pointsize 50
@@ -46,8 +56,8 @@ module VirtualNameCard
         end
       end
 
-      private def role_combine(text)
-        @image.combine_options do |config|
+      private def role_combine(image:, text:)
+        image.combine_options do |config|
           config.font File.expand_path("../../fonts/Noto_Sans_JP/NotoSansJP-Regular.otf", __dir__)
           config.gravity "west"
           config.pointsize 45
@@ -56,8 +66,8 @@ module VirtualNameCard
         end
       end
 
-      private def twitter_account_combine(text)
-        @image.combine_options do |config|
+      private def twitter_account_combine(image:, text:)
+        image.combine_options do |config|
           config.font File.expand_path("../../fonts/Noto_Sans_JP/NotoSansJP-Medium.otf", __dir__)
           config.gravity "west"
           config.pointsize 45
