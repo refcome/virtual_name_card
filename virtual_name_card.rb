@@ -42,8 +42,8 @@ class VirtualNameCard
       @image.combine_options do |config|
         config.font "./fonts/Noto_Sans_JP/NotoSansJP-Regular.otf"
         config.gravity "west"
-        config.pointsize 55
-        config.draw "text 170,25 '#{text}'"
+        config.pointsize 50
+        config.draw "text 170,22 '#{text}'"
         config.fill "#000000"
       end
     end
@@ -60,10 +60,10 @@ class VirtualNameCard
 
     private def twitter_account_combine(text)
       @image.combine_options do |config|
-        config.font "./fonts/Noto_Sans_JP/NotoSansJP-Regular.otf"
+        config.font "./fonts/Noto_Sans_JP/NotoSansJP-Medium.otf"
         config.gravity "west"
-        config.pointsize 50
-        config.draw "text 175,430 '#{text}'"
+        config.pointsize 45
+        config.draw "text 175,433 '#{text}'"
         config.fill "#593535"
       end
     end
