@@ -2,14 +2,9 @@
 
 require 'mini_magick'
 
-class Builder
+class VirtualNameCard
   BASE_IMAGE_PATH = './base_image.png'
-  TEXT_POSITION = '0,0'
-  FONT_SIZE = 65
-  INDENTION_COUNT = 11
-  ROW_LIMIT = 8
   GENERATED_FILE_PATH = "./generated_file.png"
-  FONT_FILE_PATH = "./NotoSansJP-Medium.otf"
 
   class << self
     def write(name_kanji:, name_romaji:, role:, twitter_account:)
@@ -61,4 +56,9 @@ class Builder
   end
 end
 
-Builder.write(name_kanji: ARGV[0], name_romaji: ARGV[1], role: ARGV[2], twitter_account: ARGV[3])
+VirtualNameCard.write(
+  name_kanji: ARGV[0],
+  name_romaji: ARGV[1],
+  role: ARGV[2],
+  twitter_account: ARGV[3],
+)
