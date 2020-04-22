@@ -63,7 +63,7 @@ class VirtualNameCard
         config.font "./fonts/Noto_Sans_JP/NotoSansJP-Regular.otf"
         config.gravity "west"
         config.pointsize 50
-        config.draw "text 175,420 '#{text}'"
+        config.draw "text 175,430 '#{text}'"
         config.fill "#593535"
       end
     end
