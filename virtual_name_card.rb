@@ -8,7 +8,14 @@ class VirtualNameCard
 
   class << self
     def write(name_kanji:, name_romaji:, role:, twitter_account: nil)
-      @image = MiniMagick::Image.open(BASE_IMAGE_PATH)
+      base_image_path =
+        if twitter_account
+          "./base_images/with_twitter.jpg"
+        else
+          "./base_images/without_twitter.jpg"
+        end
+
+      @image = MiniMagick::Image.open(base_image_path)
 
       name_kanji_combine(name_kanji)
       name_romaji_combine(name_romaji)
@@ -25,8 +32,9 @@ class VirtualNameCard
       @image.combine_options do |config|
         config.font "./fonts/Noto_Sans_JP/NotoSansJP-Medium.otf"
         config.gravity "west"
-        config.pointsize 80
-        config.draw "text 90,-90 '#{text}'"
+        config.pointsize 100
+        config.draw "text 170,-90 '#{text}'"
+        config.fill "#000000"
       end
     end
 
@@ -34,8 +42,9 @@ class VirtualNameCard
       @image.combine_options do |config|
         config.font "./fonts/Noto_Sans_JP/NotoSansJP-Regular.otf"
         config.gravity "west"
-        config.pointsize 40
-        config.draw "text 90,0 '#{text}'"
+        config.pointsize 55
+        config.draw "text 170,25 '#{text}'"
+        config.fill "#000000"
       end
     end
 
@@ -43,8 +52,9 @@ class VirtualNameCard
       @image.combine_options do |config|
         config.font "./fonts/Noto_Sans_JP/NotoSansJP-Regular.otf"
         config.gravity "west"
-        config.pointsize 40
-        config.draw "text 90,70 '#{text}'"
+        config.pointsize 45
+        config.draw "text 170,105 '#{text}'"
+        config.fill "#000000"
       end
     end
 
@@ -52,8 +62,9 @@ class VirtualNameCard
       @image.combine_options do |config|
         config.font "./fonts/Noto_Sans_JP/NotoSansJP-Regular.otf"
         config.gravity "west"
-        config.pointsize 40
-        config.draw "text 90,400 '#{text}'"
+        config.pointsize 50
+        config.draw "text 175,420 '#{text}'"
+        config.fill "#593535"
       end
     end
   end
