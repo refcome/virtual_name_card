@@ -1,9 +1,9 @@
 module VirtualNameCard
   class Image
-    attr_reader :mini_magic_image
+    attr_reader :mini_magick_image
 
-    def initialize(mini_magic_image:)
-      @mini_magic_image = mini_magic_image
+    def initialize(mini_magick_image:)
+      @mini_magick_image = mini_magick_image
     end
   end
 end

@@ -43,7 +43,7 @@ module VirtualNameCard
           image = url_combine(image: image, url: url)
         end
 
-        VirtualNameCard::Image.new(mini_magic_image: image)
+        VirtualNameCard::Image.new(mini_magick_image: image)
       end
 
       # @param [String] name_kanji
@@ -61,7 +61,7 @@ module VirtualNameCard
           twitter_account: twitter_account,
           url: url,
         )
-        image.mini_magic_image.write GENERATED_FILE_PATH
+        image.mini_magick_image.write GENERATED_FILE_PATH
       end
 
       private def name_kanji_combine(image:, text:)
