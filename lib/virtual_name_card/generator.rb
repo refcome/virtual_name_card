@@ -1,11 +1,20 @@
 require 'mini_magick'
+require "rqrcode"
+require "chunky_png"
 
 module VirtualNameCard
   class Generator
     GENERATED_FILE_PATH = File.expand_path("../../generated_file.png", __dir__)
 
     class << self
-      def generate(name_kanji:, name_romaji:, role:, email:, twitter_account: nil)
+      # @param [String] name_kanji
+      # @param [String] name_romaji
+      # @param [String, nil] role
+      # @param [String, nil] email
+      # @param [String, nil] twitter_account
+      # @param [String, nil] url
+      # @return [VirtualNameCard::Image]
+      def build(name_kanji:, name_romaji:, role: nil, email: nil, twitter_account: nil, url: nil)
         base_image_path =
           if twitter_account
             File.expand_path("../../base_images/with_twitter.jpg", __dir__)
@@ -30,18 +39,29 @@ module VirtualNameCard
           twitter_account_combine(image: image, text: twitter_account)
         end
 
-        image
+        if url
+          image = url_combine(image: image, url: url)
+        end
+
+        VirtualNameCard::Image.new(mini_magic_image: image)
       end
 
-      def write(name_kanji:, name_romaji:, role:, email:, twitter_account: nil)
-        image = generate(
+      # @param [String] name_kanji
+      # @param [String] name_romaji
+      # @param [String, nil] role
+      # @param [String, nil] email
+      # @param [String, nil] twitter_account
+      # @param [String, nil] url
+      def generate(name_kanji:, name_romaji:, role: nil, email: nil, twitter_account: nil, url: nil)
+        image = build(
           name_kanji: name_kanji,
           name_romaji: name_romaji,
           role: role,
           email: email,
           twitter_account: twitter_account,
+          url: url,
         )
-        image.write GENERATED_FILE_PATH
+        image.mini_magic_image.write GENERATED_FILE_PATH
       end
 
       private def name_kanji_combine(image:, text:)
@@ -91,6 +111,29 @@ module VirtualNameCard
           config.pointsize 45
           config.draw "text 175,433 '#{text}'"
           config.fill "#593535"
+        end
+      end
+
+      private def url_combine(image:, url:)
+        qr_image = RQRCode::QRCode.new(url).as_png(
+          bit_depth: 1,
+          border_modules: 4,
+          color_mode: ChunkyPNG::COLOR_GRAYSCALE,
+          color: 'black',
+          file: nil,
+          fill: 'white',
+          module_px_size: 6,
+          resize_exactly_to: false,
+          resize_gte_to: false,
+          size: 240,
+        ).yield_self do |png|
+          MiniMagick::Image.read(png.to_s)
+        end
+
+        image.composite(qr_image) do |config|
+          config.compose "Over"
+          config.gravity "east"
+          config.geometry "+110+345"
         end
       end
     end
